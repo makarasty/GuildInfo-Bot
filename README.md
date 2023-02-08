@@ -13,7 +13,7 @@ module.exports = {
 		/*
 		*	{all_online_users}		All users who currently have any status (not autonomous)
 		*	{all_offline_users}		All users who have no status
-		*	{users_status_online}	All users are online
+		*	{users_status_online}		All users are online
 		*	{users_status_idle}		All users are idle
 		*	{users_status_dnd}		All users are dnd
 		*	{all_users_count}		All users, have status
