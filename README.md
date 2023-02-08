@@ -56,3 +56,5 @@ module.exports = {
 	}
 }
 ```
+# Dependencies
+* `discord.js: 14`
