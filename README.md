@@ -80,3 +80,6 @@ module.exports = {
 ```
 # Dependencies
 * `discord.js: 14`
+# Installing
+* `npm i`
+* `node index.js`
