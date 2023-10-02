@@ -79,7 +79,9 @@ module.exports = {
 }
 ```
 # Dependencies
-* `discord.js: 14`
+* `node.js: 16v+ tested on 18v`
+* `bluebird: ^3.7`
+* `discord.js: ^14`
 # Installing
 * `npm i`
 * `node index.js`
