@@ -6,36 +6,59 @@ the bot is created similarly to the Server Info bot
 ```js
 module.exports = {
 	// > Basic settings
-	Token: 'u token here',
+	Token: 'Put your token here',
 
 	// > Server Info
 	ServerInfo: {
 		/*
-		*	{all_online_users}		All users who currently have any status (not autonomous)
-		*	{all_offline_users}		All users who have no status
-		*	{users_status_online}		All users are online
-		*	{users_status_idle}		All users are idle
-		*	{users_status_dnd}		All users are dnd
-		*	{all_users_count}		All users, have status
-		*	{all_bots_count}		All bots, have not status
+		* {guildStatusOfflineUsers}	// ? all users with offline status
+		* {guildStatusOnlineUsers}	// ? all users with online status
+		* {guildStatusIdleUsers}	// ? all users with idle status
+		* {guildStatusDndUsers}		// ? all users with dnd status
+
+		* // > пользователи
+		* {guildAllOnlineUsers}		// ? all users online
+		* {guildAllUsersBotsCount}	// ? all guild members
+		* {guildAllUsersCount}		// ? all guild users without bots
+		* {guildAllBotCount}		// ? all guild bots
+
+		* // > емодзи
+		* {guildEmojisCount}		// ? all emojis count
+		* {guildAnimatedEmojis}		// ? all animated emojis count
+		* {guildStaticEmojis}		// ? all static emojis count
+
+		* // > каналы
+		* {guildAllChannels}		// ? all channels count
+		* {guildTextChannels}		// ? all text channels count
+		* {guildVoiceChannels}		// ? all voice channels count
+
+		* // > Роли
+		* {guildRolesCount}			// ? all roles count
+
+		* // > другое
+		* {botUsers}				// ? all bot users
+		* {botEmojis}				// ? all bot emojis
+		* {botChannels}				// ? all bot channels
+		* {botGuilds}				// ? all bot guilds
+		* {botPing}					// ? bot ws ping
+		* {botHeapRem}				// ? bot heap rem
+		* {botRssRem}				// ? bot Rss rem
 		*/
 		Guilds: [
 			{
 				// > Guild id
-				guildId: '785107327413911592',
+				guildId: '717073717020065863',
 				// > VC channels
 				channels: [
 					{
-						// > The maximum length of the name 32
-						name: '╭「👥」 {all_online_users}',
+						name: '╭「👥」 {guildAllUsersBotsCount}',
 						// > VC id
-						id: '1064128493681651712'
+						id: '1088868332826013847'
 					},
 					{
-						// > The maximum length of the name 32
-						name: '╰「🤖」{all_bots_count}',
+						name: '╰「🤖」{guildAllBotCount}}',
 						// > VC id
-						id: '1064128497964023919'
+						id: '1088868462350323722'
 					},
 				]
 			},
@@ -45,8 +68,7 @@ module.exports = {
 				// > VC channels
 				channels: [
 					{
-						// > The maximum length of the name 32
-						name: '┃「👤」 {all_offline_users}',
+						name: '┃「👤」 {guildStatusOfflineUsers}',
 						// > VC id
 						id: '1034544422609748029'
 					},
