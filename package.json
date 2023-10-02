@@ -1,0 +1,22 @@
+{
+  "name": "exampleserverinfodiscordbot",
+  "description": "Example Server Info Discord Bot",
+  "version": "2.0",
+  "main": "index.js",
+  "keywords": [
+    "discordjs",
+    "discord",
+    "bot",
+    "infoserver",
+    "serverinfo"
+  ],
+  "author": "MaKarastY",
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "discord.js": "^14.13.0"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "npm start"
+  }
+}
