@@ -1,7 +1,8 @@
 # Example Server Info
-the bot is created similarly to the Server Info bot
+The bot is created similarly to the Server Info bot
 
-![изображение](https://user-images.githubusercontent.com/71918286/217628482-a790e2f5-ff26-41ea-ae94-878109c38ea9.png)
+![image](https://github.com/makarasty/Example-Server-Info-Discord-Bot/assets/71918286/abb19663-9b40-4b43-8f0a-db81215d4b6a)
+
 # Example config
 ```js
 module.exports = {
@@ -79,7 +80,7 @@ module.exports = {
 }
 ```
 # Dependencies
-* `node.js: 16v+ tested on 18v`
+* `node.js: 18+`
 * `bluebird: ^3.7`
 * `discord.js: ^14`
 # Installing
