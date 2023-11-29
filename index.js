@@ -24,7 +24,7 @@ class DiscordBot extends Client {
 
 			// ? Setting bot status
 			SetBotStatus(client);
-			setTimeout(() => SetBotStatus(client), 100_000);
+			setInterval(() => SetBotStatus(client), 100_000);
 
 			// ? Starting server-info system
 			ServerInfoSystem(client);
