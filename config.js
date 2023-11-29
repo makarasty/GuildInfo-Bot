@@ -10,26 +10,26 @@ module.exports = {
 		* {guildStatusIdleUsers}	// ? all users with idle status
 		* {guildStatusDndUsers}		// ? all users with dnd status
 
-		* // > пользователи
+		* // > Users
 		* {guildAllOnlineUsers}		// ? all users online
 		* {guildAllUsersBotsCount}	// ? all guild members
 		* {guildAllUsersCount}		// ? all guild users without bots
 		* {guildAllBotCount}		// ? all guild bots
 
-		* // > емодзи
+		* // > Emojis
 		* {guildEmojisCount}		// ? all emojis count
 		* {guildAnimatedEmojis}		// ? all animated emojis count
 		* {guildStaticEmojis}		// ? all static emojis count
 
-		* // > каналы
+		* // > Channels
 		* {guildAllChannels}		// ? all channels count
 		* {guildTextChannels}		// ? all text channels count
 		* {guildVoiceChannels}		// ? all voice channels count
 
-		* // > Роли
+		* // > Roles
 		* {guildRolesCount}			// ? all roles count
 
-		* // > другое
+		* // > More
 		* {botUsers}				// ? all bot users
 		* {botEmojis}				// ? all bot emojis
 		* {botChannels}				// ? all bot channels
