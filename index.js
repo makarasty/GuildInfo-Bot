@@ -1,172 +1,101 @@
-const { Client, Events, ActivityType, ChannelType } = require("discord.js");
+const { Client, Events, ActivityType, Guild } = require("discord.js");
 
-const Config = require("./config.js");
+const configuration = require("./config.js");
 
-const Promise = require('bluebird');
-global.Promise = Promise;
+const ModifierModString = require('./dist/ModifierModString.js')
+const ModGuild = require('./dist/ModGuild.js')
+const ModBot = require('./dist/ModBot.js')
 
-class DiscordBot extends Client {
-	constructor() {
-		super({
-			restWsBridgeTimeout: 100,
-			restTimeOffset: 0,
-			intents: 47007,
-			shards: 0
-		})
-	}
-	async Init() {
-		await this.Events();
-		await this.login(Config.Token);
-		console.info(`Discord Bot started! (${this.user.tag})\n`);
-	}
-	async Events() {
-		async function BotReady(client) {
-
-			// ? Setting bot status
-			SetBotStatus(client);
-			setInterval(() => SetBotStatus(client), 100_000);
-
-			// ? Starting server-info system
-			ServerInfoSystem(client);
-			setInterval(() => ServerInfoSystem(client), 401_000);
-		}
-
-		this.on(Events.ClientReady, BotReady);
-	}
+if (!configuration.Token || configuration.Token === 'Enter your token here') {
+	throw new Error("You need to specify the bot's token to launch it");
 }
+
+const activityParams = {
+	type: ActivityType.Playing,
+	url: 'https://www.twitch.tv/makarasty'
+}
+
 /**
- * 
- * @param {string} text 
- * @param {DiscordBot} client 
- * @param {import('discord.js').Guild} guild 
- * @param {import('discord.js').GuildChannel} guildChannels 
- * @returns 
+ * @param {ServerInfoBot} client 
  */
-async function FormatChannelName(text, client, guild) {
-	const [
-		guildMembers,
-		guildChannels,
-		guildEmojis,
-		guildRoles
-	] = await Promise.all([
-		guild.members.fetch({ withPresences: true }),
-		guild.channels.fetch(),
-		guild.emojis.fetch(),
-		guild.roles.fetch()
+async function botReadyEvent(client) {
+	await Promise.all([
+		botSetStatusLoop(client),
+		channelsRenameLoop(client)
 	])
 
-	const botUsers = guildMembers.filter(({ user }) => user.bot);
-	const users = guildMembers.filter(({ user }) => !user.bot);
+	setInterval(() => botSetStatusLoop(client), configuration.ActivityUpdateInterval);
+	setInterval(() => channelsRenameLoop(client), configuration.ChannelsRenameInterval);
+}
+/**
+ * @param {ServerInfoBot} client 
+ */
+async function botSetStatusLoop(client) {
+	client.user.setActivity(configuration.ActivityText, activityParams)
+}
+/**
+ * @param {string} text 
+ */
+function log(text) {
+	configuration.DetailedLogging && console.log(text);
+}
+/**
+ * @param {ServerInfoBot} client 
+ */
+async function channelsRenameLoop(client) {
+	log('Renaming channels...');
 
-	const onlineStatusArray = ['online', 'idle', 'dnd'];
-	const offlineStatusArray = ['offline', 'invisible'];
+	const guildPromises = configuration.Guilds.map(async (guildConfig) => {
+		const guild = await client.guilds.fetch(guildConfig.GuildId)
 
-	const onlineUsersCount = users.filter(({ presence }) =>
-		presence ? onlineStatusArray.includes(presence.status) : undefined
-	).size
-	const usersStatusOffline = users.filter(({ presence }) =>
-		presence ? offlineStatusArray.includes(presence.status) : undefined
-	).size
-	const usersStatusOnline = users.filter(({ presence }) =>
-		presence ? presence.status === 'online' : undefined
-	).size
-	const usersStatusIdle = users.filter(({ presence }) =>
-		presence ? presence.status === 'idle' : undefined
-	).size
-	const usersStatusDnd = users.filter(({ presence }) =>
-		presence ? presence.status === 'dnd' : undefined
-	).size
+		const channelPromises = guildConfig.Channels.map(async (channelConfig) => {
+			const channel = guild.channels.cache.get(channelConfig.Id)
+			const oldChannelName = channel.name
 
-	const animetedEmojis = guildEmojis.filter(({ animated }) => animated);
-	const staticEmojis = guildEmojis.filter(({ animated }) => !animated);
+			const newChannelName = await getNewChannelNameUsingPattern(client, guild, channelConfig.Name)
+			try {
+				await channel.setName(newChannelName)
 
-	const processMemoryUsed = process.memoryUsage();
+				log(`In guild "${guild.name}" (${guild.id}) ✔ Renamed channel: "${oldChannelName}" ===> "${newChannelName}" (${channel.id})`);
+			} catch (error) {
+				console.error(`In guild "${guild.name}" (${guild.id}) ❌ Failed to rename the channel: "${oldChannelName}" !==> "${newChannelName}" (${channel.id})`);
+			}
+		})
 
-	const guildTextChannels = guildChannels.filter(({ type }) => type === ChannelType.GuildText);
-	const guildVoiceChannels = guildChannels.filter(({ type }) => type === ChannelType.GuildVoice);
+		await Promise.all(channelPromises)
+	})
 
-	const globalModificatorsObject = {
-		"{guildallonlineusers}": onlineUsersCount,
-		"{guildstatusofflineusers}": usersStatusOffline,
-		"{guildstatusonlineusers}": usersStatusOnline,
-		"{guildstatusidleusers}": usersStatusIdle,
-		"{guildstatusdndusers}": usersStatusDnd,
-		"{guildallusersbotscount}": guild.memberCount,
-		"{guildalluserscount}": users.size,
-		"{guildallbotcount}": botUsers.size,
-		"{guildrolescount}": guildRoles.size - 1,
-		"{guildemojiscount}": guildEmojis.size,
-		"{guildallchannels}": guildChannels.size,
-		"{guildanimatedemojis}": animetedEmojis.size,
-		"{guildstaticemojis}": staticEmojis.size,
-		"{guildtextchannels}": guildTextChannels.size,
-		"{guildvoicechannels}": guildVoiceChannels.size,
-		"{botusers}": client.users.cache.size,
-		"{botemojis}": client.emojis.cache.size,
-		"{botchannels}": client.channels.cache.size,
-		"{botguilds}": client.guilds.cache.size,
-		"{botping}": client.ws.ping || '-1',
-		"{botheaprem}": (processMemoryUsed.heapUsed / 1024 / 1024).toFixed(2),
-		"{botrssrem}": (processMemoryUsed.rss / 1024 / 1024).toFixed(2)
+	await Promise.all(guildPromises)
+
+	log('Renaming channels done!');
+}
+/**
+ * @param {ServerInfoBot} client 
+ * @param {Guild} guild 
+ * @param {string} pattern 
+ * @returns {Promise<string>}
+ */
+async function getNewChannelNameUsingPattern(client, guild, pattern) {
+	const modArray = await Promise.all([ModBot(client), ModGuild(guild)])
+
+	return await ModifierModString(modArray, pattern)
+}
+class ServerInfoBot extends Client {
+	constructor() {
+		super({ intents: 47007, shards: 0 })
 	}
+	async init() {
+		this.once(Events.ClientReady, botReadyEvent.bind(this));
 
-	const globalModificatorsKeys = Object.keys(globalModificatorsObject);
-
-	const regexp = new RegExp(globalModificatorsKeys.join('|').toLowerCase(), 'gi');
-
-	const newText = text.replace(regexp, (word) => {
-		return globalModificatorsObject[word.toLowerCase()] ?? word
-	})
-
-	return newText
-}
-/**
- * 
- * @param {DiscordBot} client 
- */
-async function ServerInfoSystem(client) {
-	await Promise.map(Config.ServerInfo.Guilds, async (guildConfig) => {
-		const { channels, guildId } = guildConfig;
-
-		const guild = await client.guilds.fetch(guildId)
-			.catch(() => console.error(`Guild "${guildId}": Guild not found! Check config!`));
-
-		if (guild) {
-			await Promise.map(channels, async (channelConfig) => {
-				const { name, id } = channelConfig;
-
-				const channel = await guild.channels.fetch(id)
-					.catch(() => console.error(`Guild "${guild.name}": Channel "${id}" not found!`));
-
-				if (channel) {
-					const newChannelName = await FormatChannelName(name, client, guild);
-					const lastChannelName = channel.name;
-
-					if (channel.name !== newChannelName) {
-						console.info(`Guild "${guild.name}": Waiting for renaming: "${newChannelName}".`);
-
-						channel
-							.setName(newChannelName)
-							.then(() => console.info(`Guild "${guild.name}": Channel renamed successfully: "${lastChannelName}" => "${newChannelName}".`))
-							.catch(() => console.error(`Guild "${guild.name}": Channel not renamed: "${lastChannelName}" !=> ${newChannelName}".`));
-					} else {
-						console.info(`Guild "${guild.name}": Channel renaming skipped: "${lastChannelName}" === "${newChannelName}".`);
-					}
-				}
+		this.login(configuration.Token)
+			.then((token) => {
+				console.info(`Discord bot running as user: ${this.user.tag}`);
 			})
-		}
-	})
+			.catch((error) => {
+				throw new Error(`An error occurred: ${error.message}`);
+			})
+	}
 }
-/**
- * 
- * @param {DiscordBot} param0 
- */
-async function SetBotStatus({ user }) {
-	user.setActivity('Example Server-Info made by https://github.com/makarasty',
-		{
-			type: ActivityType.Playing,
-			url: 'https://www.twitch.tv/makarasty'
-		}
-	)
-}
-new DiscordBot().Init();
+new ServerInfoBot().init();
+
+module.exports = ServerInfoBot

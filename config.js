@@ -1,76 +1,46 @@
-module.exports = {
-	// > Basic settings
-	Token: 'Put your token here',
+/**@type {import('types').IConfiguration}*/
+const config = {
+	// Display additional information about the bot's actions?
+	DetailedLogging: true,
 
-	// > Server Info
-	ServerInfo: {
-		/*
-		* {guildStatusOfflineUsers}	// ? all users with offline status
-		* {guildStatusOnlineUsers}	// ? all users with online status
-		* {guildStatusIdleUsers}	// ? all users with idle status
-		* {guildStatusDndUsers}		// ? all users with dnd status
+	// Bot token
+	Token: 'Enter your token here',
 
-		* // > Users
-		* {guildAllOnlineUsers}		// ? all users online
-		* {guildAllUsersBotsCount}	// ? all guild members
-		* {guildAllUsersCount}		// ? all guild users without bots
-		* {guildAllBotCount}		// ? all guild bots
+	// Text displayed in bot status
+	ActivityText: 'https://github.com/makarasty',
 
-		* // > Emojis
-		* {guildEmojisCount}		// ? all emojis count
-		* {guildAnimatedEmojis}		// ? all animated emojis count
-		* {guildStaticEmojis}		// ? all static emojis count
+	// How often the status of the bot should be updated in ms
+	ActivityUpdateInterval: 100_000,
 
-		* // > Channels
-		* {guildAllChannels}		// ? all channels count
-		* {guildTextChannels}		// ? all text channels count
-		* {guildVoiceChannels}		// ? all voice channels count
+	// How often channels must be changed in ms
+	ChannelsRenameInterval: 401_000,
 
-		* // > Roles
-		* {guildRolesCount}			// ? all roles count
+	// Server information
+	Guilds: [
 
-		* // > More
-		* {botUsers}				// ? all bot users
-		* {botEmojis}				// ? all bot emojis
-		* {botChannels}				// ? all bot channels
-		* {botGuilds}				// ? all bot guilds
-		* {botPing}					// ? bot ws ping
-		* {botHeapRem}				// ? bot heap rem
-		* {botRssRem}				// ? bot Rss rem
-		*/
-		Guilds: [
-			{
-				// > Guild id
-				guildId: '717073717020065863',
-				// > VC channels
-				channels: [
-					{
-						name: '╭「👥」 {guildAllUsersBotsCount}',
-						// > VC id
-						id: '1088868332826013847'
-					},
-					{
-						name: '╰「🤖」{guildAllBotCount}}',
-						// > VC id
-						id: '1088868462350323722'
-					},
-				]
-			},
-			{
-				// > Guild id
-				guildId: '592344029354786817',
-				// > VC channels
-				channels: [
-					{
-						name: '┃「👤」 {guildStatusOfflineUsers}',
-						// > VC id
-						id: '1034544422609748029'
-					},
-				]
-			},
-		]
-	}
+		// Guild 1
+		{
+			GuildId: '785107327413911592',
+			Channels: [
+				{
+					// Channel ID
+					Id: '1087742580340555857',
+					// Channel name with patterns
+					Name: 'Offline {guild-users-presence-offline}',
+				},
+				{
+					Id: '1087742598212489298',
+					Name: 'Online {guild-users-presence-online}',
+				},
+				{
+					Id: '1088202692142313553',
+					Name: 'Dnd {guild-users-presence-dnd}',
+				},
+			]
+		},
+
+		// Guild 2...
+	]
 }
-/* 
-* Made by https://github.com/makarasty 
-*/
+
+module.exports = config

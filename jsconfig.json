@@ -1,0 +1,11 @@
+{
+	"compilerOptions": {
+		"strict": false,
+		"allowJs": true,
+		"checkJs": true,
+		"baseUrl": ".",
+		"target": "ESNext",
+		"module": "commonjs",
+	},
+	"exclude": ["node_modules"]
+}
