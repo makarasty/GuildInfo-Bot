@@ -1,5 +1,5 @@
 # Example Guild Info
-Bot Discord, which will monitor the information and change channels once a certain amount of time, low weight, optimized
+Bot Discord, which will monitor the information and change channels once a certain amount of time, low weight, optimized!
 
 ![image](https://github.com/makarasty/GuildInfo-Bot/assets/71918286/480cab9f-3ff9-404a-aca1-9a64ee977aec)
 
@@ -56,7 +56,7 @@ module.exports = config
 - `git clone https://github.com/makarasty/GuildInfo-Bot` Copy bot files
 - `cd ./GuildInfo-Bot/` Go to bot directory
 - `npm i` Install the bot components
-- `>>> Configure config.js <<<`
+- `>>> Configure config.js <<<` [Wiki](https://github.com/makarasty/GuildInfo-Bot/wiki)
 - `node .` Start the bot 
 
 # OS Dependencies
