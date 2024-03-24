@@ -32,7 +32,7 @@ const config = {
 				{
 					// Channel ID
 					Id: '1087742580340555857',
-					// Channel name with patterns
+					// Channel name with patterns (https://github.com/makarasty/GuildInfo-Bot/wiki)
 					Name: 'Offline {guild-users-presence-offline}',
 				},
 				{

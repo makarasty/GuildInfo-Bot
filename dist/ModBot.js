@@ -19,7 +19,6 @@ async function ModBot(client) {
 		"{bot-channels-count}": client.channels.cache.size,
 		"{bot-guilds-count}": client.guilds.cache.size,
 		"{bot-network-status}": client.ws.status,
-		"{bot-started-timestamp}": `<t:${client.readyTimestamp}>`,
 		"{bot-memory-heap}": heapUsed,
 		"{bot-memory-rrs}": rrsUsed,
 		"{bot-memory-free}": freeMemory,
