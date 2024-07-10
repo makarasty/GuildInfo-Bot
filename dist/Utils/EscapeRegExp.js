@@ -1,6 +1,5 @@
 /**
- * @param {string} string 
- * @returns {string}
+ * @param {string} string
  */
 function EscapeRegExp(string) {
 	return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

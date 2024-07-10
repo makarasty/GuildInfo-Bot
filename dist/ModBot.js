@@ -1,8 +1,7 @@
 const os = require('os');
 
 /**
- * @param {import('../index.js')} client 
- * @returns 
+ * @param {import('../index.js')} client
  */
 async function ModBot(client) {
 	const memoryUsage = process.memoryUsage()

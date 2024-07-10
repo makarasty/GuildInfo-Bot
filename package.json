@@ -1,7 +1,7 @@
 {
 	"name": "guildinfo-bot",
 	"description": "Example discord guild info Bot",
-	"version": "4.0",
+	"version": "4.1",
 	"main": "index.js",
 	"keywords": [
 		"discordjs",
@@ -16,6 +16,7 @@
 		"discord.js": "^14.14.1"
 	},
 	"scripts": {
-		"start": "node index.js"
+		"start": "node index.js",
+		"build": "npm install"
 	}
 }

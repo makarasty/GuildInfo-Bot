@@ -16,9 +16,11 @@ const activityParams = {
 }
 
 /**
- * @param {ServerInfoBot} client 
+ * @param {ServerInfoBot} client
  */
 async function botReadyEvent(client) {
+	console.info(`Discord bot running as user: ${client.user.tag}`);
+
 	await Promise.all([
 		botSetStatusLoop(client),
 		channelsRenameLoop(client)
@@ -27,75 +29,87 @@ async function botReadyEvent(client) {
 	setInterval(() => botSetStatusLoop(client), configuration.ActivityUpdateInterval);
 	setInterval(() => channelsRenameLoop(client), configuration.ChannelsRenameInterval);
 }
+
 /**
- * @param {ServerInfoBot} client 
+ * @param {ServerInfoBot} client
  */
 async function botSetStatusLoop(client) {
-	client.user.setActivity(configuration.ActivityText, activityParams)
+	return client.user.setActivity(configuration.ActivityText, activityParams)
 }
+
 /**
- * @param {string} text 
+ * @param {string} text
  */
 function log(text) {
 	configuration.DetailedLogging && console.log(text);
 }
+
 /**
- * @param {ServerInfoBot} client 
+ * @param {ServerInfoBot} client
  */
 async function channelsRenameLoop(client) {
 	log('Renaming channels...');
 
-	const guildPromises = configuration.Guilds.map(async (guildConfig) => {
-		const guild = await client.guilds.fetch(guildConfig.GuildId)
+	const guildPromises = configuration.Guilds.map(
+		async (guildConfig) => {
 
-		const channelPromises = guildConfig.Channels.map(async (channelConfig) => {
-			const channel = guild.channels.cache.get(channelConfig.Id)
-			const oldChannelName = channel.name
+			const guild = (client.guilds.cache.get(guildConfig.GuildId) || await client.guilds.fetch(guildConfig.GuildId))
 
-			const newChannelName = await getNewChannelNameUsingPattern(client, guild, channelConfig.Name)
-			try {
-				await channel.setName(newChannelName)
+			const channelPromises = guildConfig.Channels.map(
+				async (channelConfig) => {
 
-				log(`In guild "${guild.name}" (${guild.id}) ✔ Renamed channel: "${oldChannelName}" ===> "${newChannelName}" (${channel.id})`);
-			} catch (error) {
-				console.error(`In guild "${guild.name}" (${guild.id}) ❌ Failed to rename the channel: "${oldChannelName}" !==> "${newChannelName}" (${channel.id})`);
-			}
+					const channel = (guild.channels.cache.get(channelConfig.Id) || await guild.channels.fetch(channelConfig.Id))
+					if (!channel) return console.error(`In guild "${guild.name}" (${guild.id}) ❌ Failed to fined the channel: "${channelConfig.Id}"`);
+
+					const oldChannelName = channel.name
+
+					const newChannelName = await getNewChannelNameUsingPattern(client, guild, channelConfig.Name)
+					try {
+						await channel.setName(newChannelName)
+
+						log(`In guild "${guild.name}" (${guild.id}) ✔ Renamed channel: "${oldChannelName}" ===> "${newChannelName}" (${channel.id})`);
+					} catch (error) {
+						console.error(`In guild "${guild.name}" (${guild.id}) ❌ Failed to rename the channel: "${oldChannelName}" !==> "${newChannelName}" (${channel.id})`);
+					}
+				})
+
+			await Promise.all(channelPromises)
 		})
-
-		await Promise.all(channelPromises)
-	})
 
 	await Promise.all(guildPromises)
 
 	log('Renaming channels done!');
 }
+
 /**
- * @param {ServerInfoBot} client 
- * @param {Guild} guild 
- * @param {string} pattern 
- * @returns {Promise<string>}
+ * @param {ServerInfoBot} client
+ * @param {Guild} guild
+ * @param {string} pattern
  */
 async function getNewChannelNameUsingPattern(client, guild, pattern) {
 	const modArray = await Promise.all([ModBot(client), ModGuild(guild)])
 
-	return await ModifierModString(modArray, pattern)
+	return ModifierModString(modArray, pattern)
 }
+
+/**
+ * @class
+ * @extends {Client<true>}
+ */
 class ServerInfoBot extends Client {
 	constructor() {
-		super({ intents: 47007, shards: 0 })
+		super({
+			intents: 47007,
+			shards: 0
+		})
 	}
 	async init() {
-		this.once(Events.ClientReady, botReadyEvent.bind(this));
+		this.once(Events.ClientReady, botReadyEvent.bind(null, this));
 
-		this.login(configuration.Token)
-			.then((token) => {
-				console.info(`Discord bot running as user: ${this.user.tag}`);
-			})
-			.catch((error) => {
-				throw new Error(`An error occurred: ${error.message}`);
-			})
+		await this.login(configuration.Token)
 	}
 }
+
 new ServerInfoBot().init();
 
 module.exports = ServerInfoBot

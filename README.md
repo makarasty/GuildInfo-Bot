@@ -64,3 +64,12 @@ module.exports = config
 
 # Lib Dependencies
 - discord.js
+
+
+╭﹝👾﹞нрп-объявления
+┃﹝🔍﹞рп-объявления
+╰﹝💝﹞ивент-пинги
+⟬ ⚡ ⟭  ⫗  GLOBAL
+
+
+┃﹝🔍﹞головний

@@ -1,10 +1,8 @@
 const EscapeRegExp = require('./Utils/EscapeRegExp.js')
 
 /**
- * 
- * @param {string} str 
- * @param {object} object 
- * @returns {string}
+ * @param {string} str
+ * @param {Object<string, any>} object
  */
 function ModifierReplacer(str, object) {
 	const objectKeys = Object.keys(object)

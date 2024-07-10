@@ -1,6 +1,5 @@
 /**
- * @param {import('discord.js').Guild} guild 
- * @returns 
+ * @param {import('discord.js').Guild} guild
  */
 function GetMembersPresences(guild) {
 	let allUsers = 0;

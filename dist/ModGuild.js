@@ -2,7 +2,6 @@ const GetMembersPresences = require('./Utils/GetMembersPresences.js')
 
 /**
  * @param {import('discord.js').Guild} guild
- * @returns
  */
 async function ModGuild(guild) {
 	const membersPresences = GetMembersPresences(guild)
