@@ -13,7 +13,7 @@
 	],
 	"author": "MaKarastY",
 	"dependencies": {
-		"discord.js": "^14.14.1"
+		"discord.js": "^14.15.3"
 	},
 	"scripts": {
 		"start": "node index.js",
