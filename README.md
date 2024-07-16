@@ -57,19 +57,10 @@ module.exports = config
 - `cd ./GuildInfo-Bot/` Go to bot directory
 - `npm i` Install the bot components
 - `>>> Configure config.js <<<` [Wiki](https://github.com/makarasty/GuildInfo-Bot/wiki)
-- `node .` Start the bot 
+- `node .` Start the bot
 
 # OS Dependencies
 - Node.js
 
 # Lib Dependencies
 - discord.js
-
-
-╭﹝👾﹞нрп-объявления
-┃﹝🔍﹞рп-объявления
-╰﹝💝﹞ивент-пинги
-⟬ ⚡ ⟭  ⫗  GLOBAL
-
-
-┃﹝🔍﹞головний

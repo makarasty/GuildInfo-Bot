@@ -33,7 +33,7 @@ async function botReadyEvent(client) {
 /**
  * @param {ServerInfoBot} client
  */
-async function botSetStatusLoop(client) {
+function botSetStatusLoop(client) {
 	return client.user.setActivity(configuration.ActivityText, activityParams)
 }
 
@@ -87,9 +87,9 @@ async function channelsRenameLoop(client) {
  * @param {string} pattern
  */
 async function getNewChannelNameUsingPattern(client, guild, pattern) {
-	const modArray = await Promise.all([ModBot(client), ModGuild(guild)])
+	const [clientMod, guildMod] = await Promise.all([ModBot(client), ModGuild(guild)]);
 
-	return ModifierModString(modArray, pattern)
+	return ModifierModString([clientMod, guildMod], pattern);
 }
 
 /**

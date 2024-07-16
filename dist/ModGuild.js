@@ -1,10 +1,10 @@
-const GetMembersPresences = require('./Utils/GetMembersPresences.js')
+const getMemberStats = require('./Utils/getMemberStats')
 
 /**
  * @param {import('discord.js').Guild} guild
  */
-async function ModGuild(guild) {
-	const membersPresences = GetMembersPresences(guild)
+function ModGuild(guild) {
+	const membersPresences = getMemberStats(guild)
 
 	const object = {
 		"{guild-invites-count}": guild.invites.cache.size,
@@ -16,21 +16,23 @@ async function ModGuild(guild) {
 		"{guild-channel-count}": guild.channels.channelCountWithoutThreads,
 		"{guild-roles-count}": guild.roles.cache.size,
 		"{guild-stickers-count}": guild.stickers.cache.size,
-		"{guild-member-count}": membersPresences.bots.allBots + membersPresences.users.allUsers,
-		"{guild-users-count}": membersPresences.bots.allBots,
-		"{guild-bots-count}": membersPresences.users.allUsers,
+		"{guild-member-count}": membersPresences.bots.all + membersPresences.users.all,
+		"{guild-users-count}": membersPresences.bots.all,
+		"{guild-bots-count}": membersPresences.users.all,
 		"{guild-premium-subscription-count}": guild.premiumSubscriptionCount,
 		"{guild-vanity-URL-uses}": guild.vanityURLUses,
-		"{guild-users-presence-offline}": membersPresences.users.offlineUsers,
-		"{guild-users-presence-online}": membersPresences.users.onlineUsers,
-		"{guild-users-presence-idle}": membersPresences.users.idleUsers,
-		"{guild-users-presence-dnd}": membersPresences.users.dndUsers,
-		"{guild-bots-presence-offline}": membersPresences.bots.offlineBots,
-		"{guild-bots-presence-online}": membersPresences.bots.onlineBots,
-		"{guild-bots-presence-idle}": membersPresences.bots.idleBots,
-		"{guild-bots-presence-dnd}": membersPresences.bots.dndBots,
+		"{guild-users-presence-offline}": membersPresences.users.offline,
+		"{guild-users-presence-online}": membersPresences.users.online,
+		"{guild-users-presence-idle}": membersPresences.users.idle,
+		"{guild-users-presence-dnd}": membersPresences.users.dnd,
+		"{guild-bots-presence-offline}": membersPresences.bots.offline,
+		"{guild-bots-presence-online}": membersPresences.bots.online,
+		"{guild-bots-presence-idle}": membersPresences.bots.idle,
+		"{guild-bots-presence-dnd}": membersPresences.bots.dnd,
 		"{guild-emojis-count}": guild.emojis.cache.size
 	}
+
+	console.log(object);
 
 	return object
 }

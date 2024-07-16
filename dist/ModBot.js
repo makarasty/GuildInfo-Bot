@@ -1,15 +1,18 @@
 const os = require('os');
 
 /**
+ * @param {number} bytes
+ */
+function toMB(bytes) {
+	return (bytes / 1048576).toFixed(2);
+}
+
+/**
  * @param {import('../index.js')} client
  */
-async function ModBot(client) {
+function ModBot(client) {
 	const memoryUsage = process.memoryUsage()
 	const freeMemoryBytes = os.freemem()
-
-	const heapUsed = (memoryUsage.heapUsed / 1024 / 1024).toFixed(2)
-	const rrsUsed = (memoryUsage.rss / 1024 / 1024).toFixed(2)
-	const freeMemory = (freeMemoryBytes / 1024 / 1024).toFixed(2)
 
 	const object = {
 		"{bot-ping}": client.ws.ping,
@@ -18,10 +21,12 @@ async function ModBot(client) {
 		"{bot-channels-count}": client.channels.cache.size,
 		"{bot-guilds-count}": client.guilds.cache.size,
 		"{bot-network-status}": client.ws.status,
-		"{bot-memory-heap}": heapUsed,
-		"{bot-memory-rrs}": rrsUsed,
-		"{bot-memory-free}": freeMemory,
+		"{bot-memory-heap}": toMB(memoryUsage.heapUsed),
+		"{bot-memory-rrs}": toMB(memoryUsage.rss),
+		"{bot-memory-free}": toMB(freeMemoryBytes),
 	}
+
+	console.log(object);
 
 	return object
 }
