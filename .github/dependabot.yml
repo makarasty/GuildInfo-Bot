@@ -1,14 +1,19 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
-
 version: 2
 updates:
-  # Enable version updates for npm
-  - package-ecosystem: "npm"
-    # Look for `package.json` and `lock` files in the `root` directory
-    directory: "/"
-    # Check the npm registry for updates every day (weekdays)
+  - package-ecosystem: "npm"             # Экосистема для которой будут проверяться зависимости (npm)
+    directory: "/"                       # Директория, где находится package.json
     schedule:
-      interval: "daily"
+      interval: "daily"                 # Интервал проверки (еженедельно)
+    commit-message:
+      prefix: "deps"                     # Префикс для сообщений коммитов в PR
+      include: "scope"                   # Включить название библиотеки в сообщение коммита
+    open-pull-requests-limit: 10         # Максимальное количество открытых PR
+    rebase-strategy: "auto"              # Автоматический ребейз PR
+    versioning-strategy: "increase"      # Стратегия обновления: "increase", "widen", "lockfile-only", или "auto"
+    labels:
+      - "dependencies"                   # Метка, которая будет автоматически добавляться к создаваемым PR
+    reviewers:
+      - "makarasty"                      # Назначить пользователей на PR для ревью (укажите свои)
+    assignees:
+      - "makarasty"                      # Назначить пользователей ответственными за PR
+    target-branch: "main"                # Целевая ветка для PR (можно указать другую ветку)
