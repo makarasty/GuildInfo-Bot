@@ -44,11 +44,21 @@ const config = {
 					Name: 'Dnd {guild-users-presence-dnd}',
 				},
 			]
+
+
+
+
+
+
 		},
 
 		// Guild 2...
 	]
 }
+
+
+
+
 module.exports = config
 ```
 
@@ -58,6 +68,11 @@ module.exports = config
 - `npm i` Install the bot components
 - `>>> Configure config.js <<<` [Wiki](https://github.com/makarasty/GuildInfo-Bot/wiki)
 - `node .` Start the bot
+
+
+
+
+
 
 # OS Dependencies
 - Node.js
