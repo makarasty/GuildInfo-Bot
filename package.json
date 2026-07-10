@@ -13,7 +13,7 @@
 	],
 	"author": "MaKarastY",
 	"dependencies": {
-		"discord.js": "^14.26.4",
+		"discord.js": "^14.26.5",
 		"guildinfo-bot": "file:"
 	},
 	"scripts": {
